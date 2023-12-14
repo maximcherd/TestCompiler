@@ -1,0 +1,81 @@
+PARSER_BEGIN(Parser)
+
+import ast.*;
+import semanticBase.*;
+import printer.*;
+
+public class Parser {
+    public static void main(String args[]) {
+        try {
+            ExprNode node = new Parser(System.in).program();
+            System.out.println("Syntax is okay");
+            System.out.println(Printer.printTree(node.tree(), "\n"));
+        } catch (Throwable e) {
+            // Catching Throwable is ugly but JavaCC throws Error objects!
+            System.out.println("Syntax check failed: " + e.getMessage());
+        }
+    }
+}
+
+PARSER_END(Parser)
+
+SKIP:  { " " | "\t" | "\n" | "\r" }
+
+TOKEN: {
+    < IF: "if" > |
+    < ELSE: "else" > |
+    < FOR: "for" > |
+    < WHILE: "while" > |
+    < RETURN: "return" > |
+    < KEYWORD: <IF> | <FOR> | <RETURN> > |
+    < NUM: (["+","-"])? (["0"-"9"])+ ("." (["0"-"9"])+)? (["e","E"] (["+","-"])? (["0"-"9"])+)? > |
+    < STR: "\"" (~["\""])+ "\"" > |
+    < TRUE: "true" > | < FALSE: "false" > |
+    < LITERAL: <NUM> | <STR> | <TRUE> | <FALSE> > |
+    < IDENT: (["a"-"z","A"-"Z","_"]) (["a"-"z","A"-"Z","_","0"-"9"])* > |
+    < TYPE: <IDENT> > |
+    < LPAR: "(" > | < RPAR: ")" > |
+    < LBRACK: "[" > | < RBRACK: "]" > |
+    < LBRACE: "{" > | < RBRACE: "}" > |
+    < SEMI: ";" > | < COMMA: "," > |
+    < ASSIGN: "=" > |
+    < ADD: "+" > | < SUB: "-" > |
+    < MUL: "*" > | < DIV: "/" > | < MOD: "%" > |
+    < AND: "&&" > | < OR: "||" > |
+    < BIT_AND: "&" > | < BIT_OR: "|" > |
+    < GE: ">=" > | < LE: "<=" > |
+    < GT: ">" > | < LT: "<" > |
+    < NEQUALS: "!=" > | < EQUALS: "==" >
+}
+
+ExprNode program(): {
+ ExprNode node;
+} {
+    node=add() (<EOF> | <SEMI> )
+    {return node;}
+}
+
+ExprNode add(): {
+    ExprNode n1;
+    ExprNode n2;
+    Token op;
+} {
+    n1=mult() ((op=<ADD> | op=<SUB>) n2=mult() {n1 = new BinOpNode(op.toString(), n1, n2);})*
+    {return n1;}
+}
+
+ExprNode mult(): {
+    ExprNode n1;
+    ExprNode n2;
+    Token op;
+} {
+    n1=num() ((op=<MUL> | op=<DIV> | op=<MOD>) n2=num() {n1 = new BinOpNode(op.toString(), n1, n2);})*
+    {return n1;}
+}
+
+ExprNode num(): {
+    Token n;
+} {
+    n=<NUM>
+    {return new LiteralNode(n.toString());}
+}
