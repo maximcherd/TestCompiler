@@ -68,7 +68,7 @@ public class TypeDesc {
         }
     }
 
-    public static TypeDesc fromBasicType(BaseType baseType) {
+    public static TypeDesc fromBaseType(BaseType baseType) {
         return new TypeDesc(baseType);
     }
 

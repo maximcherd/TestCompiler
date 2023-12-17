@@ -1,54 +1,43 @@
 import ast.StmtListNode;
+import parser.Parser;
 import printer.Printer;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import semanticBase.IdentScope;
+import semanticChecker.SemanticChecker;
 
 public class Program {
-    static Parser parser = null;
-
     public static void execute(String programFile, boolean msilOnly, boolean jbcOnly, String fileName) {
-        StmtListNode program = null;
+        StmtListNode prog = null;
         try {
-//            System.out.println(Printer.printList(programFile.getBytes(), "\n"));
-            InputStream is = new ByteArrayInputStream(programFile.getBytes());
-            if (parser == null) {
-                parser = new Parser(is);
-            } else {
-                Parser.ReInit(is);
-            }
-            program = Parser.start();
+            prog = Parser.parse(programFile);
         } catch (Exception e) {
-            System.out.println("ERROR: " + e.getMessage());
-        }
-
-        if (program == null) {
+            System.out.println(String.format("Ошибка: %s", e.getMessage()));
             System.exit(1);
         }
 
         if (!(msilOnly || jbcOnly)) {
             System.out.println("ast:");
-            System.out.println(printer.Printer.printTree(program.tree(), "\n"));
+            System.out.println(Printer.printTree(prog.tree(), System.lineSeparator()));
         }
-        System.out.println("end of program for now");
-        System.exit(0);
 
         if (!(msilOnly || jbcOnly)) {
+            System.out.println();
             System.out.println("semantic-check:");
         }
         try {
-//            checker = semantic_checker.SemanticChecker()
-//            scope = semantic_checker.prepare_global_scope()
-//            checker.semantic_check(prog, scope)
+            SemanticChecker checker = new SemanticChecker();
+            IdentScope scope = SemanticChecker.prepareGlobalScope();
+            checker.semanticCheck(prog, scope);
             if (!(msilOnly || jbcOnly)) {
-//                System.out.println(printer.Printer.printList(program.Tree));
+                System.out.println(Printer.printTree(prog.tree(), System.lineSeparator()));
+                System.out.println();
             }
         } catch (Exception e) {
-            System.out.println("ERROR: " + e.getMessage());
+            System.out.println(String.format("Ошибка: %s", e.getMessage()));
             System.exit(2);
         }
 
         if (!(msilOnly || jbcOnly)) {
+            System.out.println();
             System.out.println("msil:");
         }
         if (!jbcOnly) {

@@ -2,7 +2,9 @@ package ast;
 
 import exceptions.SemanticException;
 import semanticBase.IdentDesc;
+import semanticBase.IdentScope;
 import semanticBase.TypeDesc;
+import semanticChecker.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +75,9 @@ public abstract class AstNode {
         return new SemanticException(message, this.row, this.col);
     }
 
-//    public void semanticCheck(SemanticChecker checker, IdentScope scope) {
-//        checker.semanticCheck(this, scope);
-//    }
+    public void semanticCheck(SemanticChecker checker, IdentScope scope) throws SemanticException {
+        checker.semanticCheck(this, scope);
+    }
 
 
 //    """Чтобы среда не "ругалась" в модуле msil

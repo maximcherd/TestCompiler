@@ -1,7 +1,3 @@
-void print(string line) {
-    bool it_is_print_i_swear = true;
-}
-
 /*
 * comment
 * for
@@ -15,8 +11,8 @@ int input_int(string name) {
     if (name != "") {
         print("Input " + name + ": ");
     }
-    return 1;
-    // return to_int(read());
+    // comment 1+2/3 x void int float bool asdasdasd input_int(string name) {};
+    return to_int(read());
 }
 
 int function123(string name, int a) {
@@ -40,3 +36,4 @@ while (counter > 0) {
     counter = counter - 1;
 }
 
+print("end");

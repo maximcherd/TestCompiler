@@ -42,4 +42,36 @@ public class FuncNode extends StmtNode {
         astNodes.add(this.body);
         return astNodes;
     }
+
+    public TypeNode getType() {
+        return type;
+    }
+
+    public void setType(TypeNode type) {
+        this.type = type;
+    }
+
+    public IdentNode getName() {
+        return name;
+    }
+
+    public void setName(IdentNode name) {
+        this.name = name;
+    }
+
+    public List<ParamNode> getParams() {
+        return params;
+    }
+
+    public void setParams(List<ParamNode> params) {
+        this.params = params;
+    }
+
+    public StmtNode getBody() {
+        return body;
+    }
+
+    public void setBody(StmtNode body) {
+        this.body = body;
+    }
 }

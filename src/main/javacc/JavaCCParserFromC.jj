@@ -3,20 +3,21 @@ options
   LOOKAHEAD=2;
 }
 
-PARSER_BEGIN(Parser)
+PARSER_BEGIN(JavaCCParserFromC)
+package parser;
 
 import ast.*;
-import semanticBase.*;
 import printer.*;
-import java.io.InputStream;import java.util.List;
+import java.io.InputStream;
+import java.util.List;
 import java.util.ArrayList;
 
-public class Parser {
+public class JavaCCParserFromC {
     public static void main(String args[]) {
         try {
             InputStream is = System.in;
             System.out.println("Creating parser...");
-            StmtListNode node = new Parser(is).start();
+            StmtListNode node = new JavaCCParserFromC(is).start();
             System.out.println("Syntax is okay");
             System.out.println(Printer.printTree(node.tree(), "\n"));
         } catch (Throwable e) {
@@ -26,10 +27,9 @@ public class Parser {
     }
 }
 
-PARSER_END(Parser)
+PARSER_END(JavaCCParserFromC)
 
 SKIP:  {
-//    < ~[] > |
     " " |
     "\t" |
     "\n" |
@@ -68,54 +68,50 @@ TOKEN: {
 
 public StmtListNode start(): {
     StmtListNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n=program()
     {return n;}
 }
 
 StmtListNode program(): {
     StmtListNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n=stmtList() <EOF>
-    {System.out.println("...end of program");}
     {return n;}
 }
 
 LiteralNode num(): {
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     t=<NUM>
     {return new LiteralNode(t.toString());}
 }
 
 LiteralNode str(): {
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     t=<STR>
     {return new LiteralNode(t.toString());}
 }
 
 LiteralNode literal(): {
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     (t=<NUM> | t=<TRUE> | t=<FALSE> | t=<STR>)
-    {System.out.println("literal = " + t.toString());}
     {return new LiteralNode(t.toString());}
 }
 
 IdentNode ident(): {
    Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
    t=<IDENT>
-   {System.out.println("ident = " + t.toString());}
    {return new IdentNode(t.toString());}
 }
 
 TypeNode type(): {
    Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
    t=<TYPE>
-   {System.out.println("type = " + t.toString());}
    {return new TypeNode(t.toString());}
 }
 
@@ -123,7 +119,7 @@ ExprNode add(): {
     ExprNode n1;
     ExprNode n2;
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=mult() ((t=<ADD> | t=<SUB>) n2=mult() {n1 = new BinOpNode(t.toString(), n1, n2);})*
     {return n1;}
 }
@@ -132,21 +128,21 @@ ExprNode mult(): {
     ExprNode n1;
     ExprNode n2;
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=group() ((t=<MUL> | t=<DIV> | t=<MOD>) n2=group() {n1 = new BinOpNode(t.toString(), n1, n2);})*
     {return n1;}
 }
 
 ExprNode expr(): {
    ExprNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
    n=logicalOr()
    {return n;}
 }
 
 StmtNode stmt(): {
     StmtNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     (n=if_() | n=while_() | n=for_() | n=return_() | n=simpleStmt() <SEMI> | LOOKAHEAD(3) n=vars() <SEMI> | n=composite() | n=func())
     {return n;}
 }
@@ -154,7 +150,7 @@ StmtNode stmt(): {
 StmtListNode stmtList(): {
    List<StmtNode> nList = new ArrayList<>();
    StmtNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     (n=stmt() {nList.add(n);} (<SEMI>)*)*
    {return new StmtListNode(nList);}
 }
@@ -163,15 +159,14 @@ CallNode call(): {
     IdentNode n1;
     ExprNode n2;
     List<ExprNode> nList = new ArrayList<>();
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
    n1=ident() <LPAR> (LOOKAHEAD(1) n2=expr() {nList.add(n2);} (<COMMA> n2=expr() {nList.add(n2);})*)? <RPAR>
-   {System.out.println("call ident = " + n1.toString());}
    {return new CallNode(n1, nList);}
 }
 
 ExprNode group(): {
    ExprNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
    (n=literal() | n=call() | n=ident() | <LPAR> n=expr() <RPAR>)
    {return n;}
 }
@@ -180,7 +175,7 @@ ExprNode compare1(): {
     ExprNode n1;
     ExprNode n2;
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=add() ((t=<GE> | t=<LE> | t=<GT> | t=<LT>) n2=add() {n1 = new BinOpNode(t.toString(), n1, n2);})?
     {return n1;}
 }
@@ -189,7 +184,7 @@ ExprNode compare2(): {
     ExprNode n1;
     ExprNode n2;
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=compare1() ((t=<EQUALS> | t=<NEQUALS>) n2=compare1() {n1 = new BinOpNode(t.toString(), n1, n2);})?
     {return n1;}
 }
@@ -198,7 +193,7 @@ ExprNode logicalEnd(): {
     ExprNode n1;
     ExprNode n2;
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=compare2() (t=<AND> n2=compare2() {n1 = new BinOpNode(t.toString(), n1, n2);})*
     {return n1;}
 }
@@ -207,7 +202,7 @@ ExprNode logicalOr(): {
     ExprNode n1;
     ExprNode n2;
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=logicalEnd() (t=<OR> n2=logicalEnd() {n1 = new BinOpNode(t.toString(), n1, n2);})*
     {return n1;}
 }
@@ -216,14 +211,14 @@ AssignNode assign(): {
     IdentNode n1;
     ExprNode n2;
     Token t;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=ident() <ASSIGN> n2=expr()
     {return new AssignNode(n1, n2);}
 }
 
 ExprNode varInner(): {
     ExprNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     (n=assign() | n=ident())
     {return n;}
 }
@@ -232,14 +227,14 @@ VarsNode vars(): {
     TypeNode n1;
     ExprNode n2;
     List<ExprNode> nList = new ArrayList<>();
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=type() n2=varInner() {nList.add(n2);} (<COMMA> n2=varInner() {nList.add(n2);})*
     {return new VarsNode(n1, nList);}
 }
 
 StmtNode simpleStmt(): {
     StmtNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     (n=assign() | n=call())
     {return n;}
 }
@@ -247,7 +242,7 @@ StmtNode simpleStmt(): {
 StmtListNode forStmtList0(): {
     StmtNode n;
     List<StmtNode> nList = new ArrayList<>();
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
 //todo n type is ExprNode wich is same lvl as StmtNode
     (n=simpleStmt() {nList.add(n);} (<COMMA> n=simpleStmt() {nList.add(n);})*)?
     {return new StmtListNode(nList);}
@@ -255,14 +250,14 @@ StmtListNode forStmtList0(): {
 
 StmtNode forStmtList(): {
     StmtNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     (n=vars() | n=forStmtList0())
     {return n;}
 }
 
 ExprNode forCond(): {
     ExprNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
 //todo empty->null?
     (n=expr() | <EMPTY> {n=new StmtListNode(new ArrayList<>());})
     {return n;}
@@ -270,7 +265,7 @@ ExprNode forCond(): {
 
 StmtNode forBody(): {
     StmtNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
 //todo semi->null?
     (n=stmt() | <SEMI> {n=new StmtListNode(new ArrayList<>());})
     {return n;}
@@ -280,7 +275,7 @@ IfNode if_(): {
     ExprNode n1;
     StmtNode n2;
     StmtNode n3 = null;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     <IF> <LPAR> n1=expr() <RPAR> n2=stmt() (<ELSE> n3=stmt())?
     {return new IfNode(n1, n2, n3);}
 }
@@ -288,7 +283,7 @@ IfNode if_(): {
 WhileNode while_(): {
     ExprNode n1;
     StmtNode n2;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     <WHILE> <LPAR> n1=expr() <RPAR> n2=stmt()
     {return new WhileNode(n1, n2);}
 }
@@ -298,21 +293,21 @@ ForNode for_(): {
     ExprNode n2;
     StmtNode n3;
     StmtNode n4;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     <FOR> <LPAR> n1=forStmtList() <SEMI> n2=forCond() <SEMI> n3=forStmtList() <RPAR> n4=forBody()
     {return new ForNode(n1, n2, n3, n4);}
 }
 
 ReturnNode return_(): {
     ExprNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     <RETURN> n=expr()
     {return new ReturnNode(n);}
 }
 
 StmtListNode composite(): {
     StmtListNode n;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
      <LBRACE> n=stmtList() <RBRACE>
     {return n;}
 }
@@ -320,7 +315,7 @@ StmtListNode composite(): {
 ParamNode param(): {
     TypeNode n1;
     IdentNode n2;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=type() n2=ident()
     {return new ParamNode(n1, n2);}
 }
@@ -328,7 +323,7 @@ ParamNode param(): {
 List<ParamNode> params(): {
     ParamNode n;
     List<ParamNode> nList = new ArrayList<>();
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     (n=param() {nList.add(n);} (<COMMA> n=param() {nList.add(n);})*)?
     {return nList;}
 }
@@ -338,7 +333,7 @@ FuncNode func(): {
     IdentNode n2;
     List<ParamNode> nList;
     StmtNode n3;
-} { {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+} {
     n1=type() n2=ident() <LPAR> nList=params() <RPAR> <LBRACE> n3=stmtList() <RBRACE>
     {return new FuncNode(n1, n2, nList, n3);}
 }

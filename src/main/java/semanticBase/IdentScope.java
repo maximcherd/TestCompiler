@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class IdentScope {
     private HashMap<String, IdentDesc> idents = new HashMap<>();
     private IdentScope parent = null;
-    private IdentScope func = null;
+    private IdentDesc func = null;
     private Integer varIndex = 0;
     private Integer paramIndex = 0;
 
@@ -114,11 +114,11 @@ public class IdentScope {
         this.parent = parent;
     }
 
-    public IdentScope getFunc() {
+    public IdentDesc getFunc() {
         return func;
     }
 
-    public void setFunc(IdentScope func) {
+    public void setFunc(IdentDesc func) {
         this.func = func;
     }
 
