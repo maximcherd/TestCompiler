@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TypeDesc {
-    TypeDesc VOID = new TypeDesc(BaseType.VOID);
-    TypeDesc INT = new TypeDesc(BaseType.INT);
-    TypeDesc FLOAT = new TypeDesc(BaseType.FLOAT);
-    TypeDesc BOOL = new TypeDesc(BaseType.BOOL);
-    TypeDesc STR = new TypeDesc(BaseType.STR);
+    public static TypeDesc VOID = new TypeDesc(BaseType.VOID);
+    public static TypeDesc INT = new TypeDesc(BaseType.INT);
+    public static TypeDesc FLOAT = new TypeDesc(BaseType.FLOAT);
+    public static TypeDesc BOOL = new TypeDesc(BaseType.BOOL);
+    public static TypeDesc STR = new TypeDesc(BaseType.STR);
 
-    BaseType baseType = null;
-    TypeDesc returnType = null;
-    List<TypeDesc> params = new ArrayList<TypeDesc>();
+    private BaseType baseType = null;
+    private TypeDesc returnType = null;
+    private List<TypeDesc> params = new ArrayList<TypeDesc>();
 
     public TypeDesc() {
     }
@@ -97,5 +97,29 @@ public class TypeDesc {
             sb.append(')');
             return sb.toString();
         }
+    }
+
+    public BaseType getBaseType() {
+        return baseType;
+    }
+
+    public void setBaseType(BaseType baseType) {
+        this.baseType = baseType;
+    }
+
+    public TypeDesc getReturnType() {
+        return returnType;
+    }
+
+    public void setReturnType(TypeDesc returnType) {
+        this.returnType = returnType;
+    }
+
+    public List<TypeDesc> getParams() {
+        return params;
+    }
+
+    public void setParams(List<TypeDesc> params) {
+        this.params = params;
     }
 }

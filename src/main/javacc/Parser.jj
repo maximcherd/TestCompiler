@@ -1,13 +1,20 @@
+options
+{
+  LOOKAHEAD=2;
+}
+
 PARSER_BEGIN(Parser)
 
 import ast.*;
 import semanticBase.*;
 import printer.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Parser {
     public static void main(String args[]) {
         try {
-            ExprNode node = new Parser(System.in).program();
+            StmtListNode node = new Parser(System.in).start();
             System.out.println("Syntax is okay");
             System.out.println(Printer.printTree(node.tree(), "\n"));
         } catch (Throwable e) {
@@ -17,17 +24,29 @@ public class Parser {
     }
 }
 
+
 PARSER_END(Parser)
 
-SKIP:  { " " | "\t" | "\n" | "\r" }
+SKIP:  {
+    " " |
+    "\t" |
+    "\n" |
+    "\r" |
+    < C_COMMENTS: "/*" ( ~["*"] | "*" ~["/"] )* "*/"> |
+    < SLASH_COMMENTS: "//" ("\\\n" | ~["\n"] )* >
+}
+/*
+
+ */
 
 TOKEN: {
+    < EMPTY: "" > |
     < IF: "if" > |
     < ELSE: "else" > |
     < FOR: "for" > |
     < WHILE: "while" > |
     < RETURN: "return" > |
-    < KEYWORD: <IF> | <FOR> | <RETURN> > |
+    < KEYWORD: <IF> | <ELSE> | <FOR> | <WHILE> | <RETURN> > |
     < NUM: (["+","-"])? (["0"-"9"])+ ("." (["0"-"9"])+)? (["e","E"] (["+","-"])? (["0"-"9"])+)? > |
     < STR: "\"" (~["\""])+ "\"" > |
     < TRUE: "true" > | < FALSE: "false" > |
@@ -48,34 +67,279 @@ TOKEN: {
     < NEQUALS: "!=" > | < EQUALS: "==" >
 }
 
-ExprNode program(): {
- ExprNode node;
+public StmtListNode start(): {
+    StmtListNode n;
 } {
-    node=add() (<EOF> | <SEMI> )
-    {return node;}
+    {System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());}
+    n=program()
+    {return n;}
+}
+
+StmtListNode program(): {
+    StmtListNode n;
+} {
+    n=stmtList() <EOF>
+    {return n;}
+}
+
+LiteralNode num(): {
+    Token t;
+} {
+    t=<NUM>
+    {return new LiteralNode(t.toString());}
+}
+
+LiteralNode str(): {
+    Token t;
+} {
+    t=<STR>
+    {return new LiteralNode(t.toString());}
+}
+
+LiteralNode literal(): {
+    Token t;
+} {
+    t=<NUM> | t=<STR> | t=<TRUE> | t=<FALSE>
+    {return new LiteralNode(t.toString());}
+}
+
+IdentNode ident(): {
+   Token t;
+} {
+   t=<IDENT>
+   {return new IdentNode(t.toString());}
+}
+
+TypeNode type(): {
+   Token t;
+} {
+   t=<TYPE>
+   {return new TypeNode(t.toString());}
 }
 
 ExprNode add(): {
     ExprNode n1;
     ExprNode n2;
-    Token op;
+    Token t;
 } {
-    n1=mult() ((op=<ADD> | op=<SUB>) n2=mult() {n1 = new BinOpNode(op.toString(), n1, n2);})*
+    n1=mult() ((t=<ADD> | t=<SUB>) n2=mult() {n1 = new BinOpNode(t.toString(), n1, n2);})*
     {return n1;}
 }
 
 ExprNode mult(): {
     ExprNode n1;
     ExprNode n2;
-    Token op;
+    Token t;
 } {
-    n1=num() ((op=<MUL> | op=<DIV> | op=<MOD>) n2=num() {n1 = new BinOpNode(op.toString(), n1, n2);})*
+    n1=group() ((t=<MUL> | t=<DIV> | t=<MOD>) n2=group() {n1 = new BinOpNode(t.toString(), n1, n2);})*
     {return n1;}
 }
 
-ExprNode num(): {
-    Token n;
+ExprNode expr(): {
+   ExprNode n;
 } {
-    n=<NUM>
-    {return new LiteralNode(n.toString());}
+   n=logicalOr()
+   {return n;}
 }
+
+StmtNode stmt(): {
+    StmtNode n;
+} {
+    n=if_() | n=while_() | n=for_() | n=return_() | n=simpleStmt() <SEMI> | n=vars() <SEMI> | n=composite() | n=func()
+    {return n;}
+}
+
+StmtListNode stmtList(): {
+   List<StmtNode> nList = new ArrayList<>();
+   StmtNode n;
+} {
+    (n=stmt() {nList.add(n);} (<SEMI>)*)*
+   {return new StmtListNode(nList);}
+}
+
+CallNode call(): {
+    IdentNode n1;
+    ExprNode n2;
+    List<ExprNode> nList = new ArrayList<>();
+} {
+   n1=ident() <LPAR> (n2=expr() {nList.add(n2);} (<COMMA> n2=expr() {nList.add(n2);})*)? <RPAR>
+   {return new CallNode(n1, nList);}
+}
+
+ExprNode group(): {
+   ExprNode n;
+} {
+   n=literal() | n=call() | n=ident() | <LPAR> n=expr() <RPAR>
+   {return n;}
+}
+
+ExprNode compare1(): {
+    ExprNode n1;
+    ExprNode n2;
+    Token t;
+} {
+    n1=add() ((t=<GE> | t=<LE> | t=<GT> | t=<LT>) n2=add() {n1 = new BinOpNode(t.toString(), n1, n2);})?
+    {return n1;}
+}
+
+ExprNode compare2(): {
+    ExprNode n1;
+    ExprNode n2;
+    Token t;
+} {
+    n1=compare1() ((t=<EQUALS> | t=<NEQUALS>) n2=compare1() {n1 = new BinOpNode(t.toString(), n1, n2);})?
+    {return n1;}
+}
+
+ExprNode logicalEnd(): {
+    ExprNode n1;
+    ExprNode n2;
+    Token t;
+} {
+    n1=compare2() (t=<AND> n2=compare2() {n1 = new BinOpNode(t.toString(), n1, n2);})*
+    {return n1;}
+}
+
+ExprNode logicalOr(): {
+    ExprNode n1;
+    ExprNode n2;
+    Token t;
+} {
+    n1=logicalEnd() (t=<OR> n2=logicalEnd() {n1 = new BinOpNode(t.toString(), n1, n2);})*
+    {return n1;}
+}
+
+AssignNode assign(): {
+    IdentNode n1;
+    ExprNode n2;
+    Token t;
+} {
+    n1=ident() <ASSIGN> n2=expr()
+    {return new AssignNode(n1, n2);}
+}
+
+ExprNode varInner(): {
+    ExprNode n;
+} {
+    n=assign() | n=ident()
+    {return n;}
+}
+
+VarsNode vars(): {
+    TypeNode n1;
+    ExprNode n2;
+    List<ExprNode> nList = new ArrayList<>();
+} {
+    n1=type() n2=varInner() {nList.add(n2);} (<COMMA> n2=varInner() {nList.add(n2);})*
+    {return new VarsNode(n1, nList);}
+}
+
+StmtNode simpleStmt(): {
+    StmtNode n;
+} {
+    n=assign() | n=call()
+    {return n;}
+}
+
+StmtListNode forStmtList0(): {
+    StmtNode n;
+    List<StmtNode> nList = new ArrayList<>();
+} {
+//todo n type is ExprNode wich is same lvl as StmtNode
+    (n=simpleStmt() {nList.add(n);} (<COMMA> n=simpleStmt() {nList.add(n);})*)?
+    {return new StmtListNode(nList);}
+}
+
+StmtNode forStmtList(): {
+    StmtNode n;
+} {
+    n=vars() | n=forStmtList0()
+    {return n;}
+}
+
+ExprNode forCond(): {
+    ExprNode n;
+} {
+//todo empty->null?
+    n=expr() | <EMPTY> {n=new StmtListNode(new ArrayList<>());}
+    {return n;}
+}
+
+StmtNode forBody(): {
+    StmtNode n;
+} {
+//todo semi->null?
+    n=stmt() | <SEMI> {n=new StmtListNode(new ArrayList<>());}
+    {return n;}
+}
+
+IfNode if_(): {
+    ExprNode n1;
+    StmtNode n2;
+    StmtNode n3 = null;
+} {
+    <IF> <LPAR> n1=expr() <RPAR> n2=stmt() (<ELSE> n3=stmt())?
+    {return new IfNode(n1, n2, n3);}
+}
+
+WhileNode while_(): {
+    ExprNode n1;
+    StmtNode n2;
+} {
+    <WHILE> <LPAR> n1=expr() <RPAR> n2=stmt()
+    {return new WhileNode(n1, n2);}
+}
+
+ForNode for_(): {
+    StmtNode n1;
+    ExprNode n2;
+    StmtNode n3;
+    StmtNode n4;
+} {
+    <FOR> <LPAR> n1=forStmtList() <SEMI> n2=forCond() <SEMI> n3=forStmtList() <RPAR> n4=forBody()
+    {return new ForNode(n1, n2, n3, n4);}
+}
+
+ReturnNode return_(): {
+    ExprNode n;
+} {
+    <RETURN> n=expr()
+    {return new ReturnNode(n);}
+}
+
+StmtListNode composite(): {
+    StmtListNode n;
+} {
+    <LBRACE> n=stmtList() <RBRACE>
+    {return n;}
+}
+
+ParamNode param(): {
+    TypeNode n1;
+    IdentNode n2;
+} {
+    n1=type() n2=ident()
+    {return new ParamNode(n1, n2);}
+}
+
+List<ParamNode> params(): {
+    ParamNode n;
+    List<ParamNode> nList = new ArrayList<>();
+} {
+    (n=param() {nList.add(n);} (<COMMA> n=param() {nList.add(n);})*)?
+    {return nList;}
+}
+
+FuncNode func(): {
+    TypeNode n1;
+    IdentNode n2;
+    List<ParamNode> nList;
+    StmtNode n3;
+} {
+    n1=type() n2=ident() <LPAR> nList=params() <RPAR> <LBRACE> n3=stmtList() <RBRACE>
+    {return new FuncNode(n1, n2, nList, n3);}
+}
+
+
+
+

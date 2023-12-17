@@ -5,6 +5,9 @@ import semanticBase.BinOp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс для представления в AST-дереве бинарных операций
+ */
 public class BinOpNode extends ExprNode {
     private BinOp op;
     private ExprNode arg1;
@@ -22,9 +25,16 @@ public class BinOpNode extends ExprNode {
         this.arg2 = arg2;
     }
 
+    public BinOpNode(Integer row, Integer col, BinOp op, ExprNode arg1, ExprNode arg2) {
+        super(row, col);
+        this.op = op;
+        this.arg1 = arg1;
+        this.arg2 = arg2;
+    }
+
     @Override
     public String toString() {
-        return op.toString();
+        return op .toString();
     }
 
     @Override

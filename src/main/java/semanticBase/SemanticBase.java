@@ -112,7 +112,7 @@ public class SemanticBase {
         if (!fromType.isSimple() || !toType.isSimple()) {
             return false;
         }
-        return TYPE_CONVERTIBILITY.containsKey(fromType.baseType)
-                && TYPE_CONVERTIBILITY.get(fromType.baseType).contains(toType.baseType);
+        return TYPE_CONVERTIBILITY.containsKey(fromType.getBaseType())
+                && TYPE_CONVERTIBILITY.get(fromType.getBaseType()).contains(toType.getBaseType());
     }
 }

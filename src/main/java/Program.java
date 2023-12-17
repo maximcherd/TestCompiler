@@ -1,15 +1,34 @@
+import ast.StmtListNode;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 public class Program {
+    static Parser parser = null;
+
     public static void execute(String programFile, boolean msilOnly, boolean jbcOnly, String fileName) {
+        StmtListNode program = null;
         try {
-//            StatementListNode program = Parser.parse(programFile);
+            InputStream is = new ByteArrayInputStream(programFile.getBytes());
+            if (parser == null) {
+                parser = new Parser(is);
+            } else {
+                Parser.ReInit(is);
+            }
+            program = Parser.start();
         } catch (Exception e) {
             System.out.println("ERROR: " + e.getMessage());
         }
 
+        if (program == null) {
+            System.exit(1);
+        }
+
         if (!(msilOnly || jbcOnly)) {
             System.out.println("ast:");
-//            System.out.println(printer.Printer.printList(program.Tree));
+            System.out.println(printer.Printer.printTree(program.tree(), "\n"));
         }
+        System.out.println("end of program for now");
         System.exit(0);
 
         if (!(msilOnly || jbcOnly)) {

@@ -8,7 +8,7 @@ public class SemanticException extends Exception {
         super(message);
     }
 
-    private SemanticException(String message, Integer row, Integer col) {
+    public SemanticException(String message, Integer row, Integer col) {
         super(getMessage(message, row, col));
     }
 

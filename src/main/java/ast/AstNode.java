@@ -1,16 +1,20 @@
 package ast;
 
+import exceptions.SemanticException;
 import semanticBase.IdentDesc;
 import semanticBase.TypeDesc;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Базовый абстрактный класс узла AST-дерева
+ */
 public abstract class AstNode {
-    protected Integer row = null;
-    protected Integer col = null;
-    protected TypeDesc nodeType = null;
-    protected IdentDesc nodeIdent = null;
+    private Integer row = null;
+    private Integer col = null;
+    private TypeDesc nodeType = null;
+    private IdentDesc nodeIdent = null;
 
     public AstNode() {
     }
@@ -33,7 +37,7 @@ public abstract class AstNode {
 
     @Override
     public String toString() {
-        return "AstNodeAbst{}";
+        return super.toString();
     }
 
     public String toStringFull() {
@@ -63,5 +67,62 @@ public abstract class AstNode {
             }
         }
         return r;
+    }
+
+    public SemanticException semanticError(String message) {
+        return new SemanticException(message, this.row, this.col);
+    }
+
+//    public void semanticCheck(SemanticChecker checker, IdentScope scope) {
+//        checker.semanticCheck(this, scope);
+//    }
+
+
+//    """Чтобы среда не "ругалась" в модуле msil
+//    """
+//    def msil_gen(self, generator) -> None:
+//            generator.msil_gen(self)
+//
+//            """Чтобы среда не "ругалась" в модуле jbc
+//    """
+//    def jbc_gen(self, generator) -> None:
+//            generator.jbc_gen(self)
+//
+//            """Чтобы среда не "ругалась" в модуле llvm
+//    """
+//    def llvm_gen(self, generator) -> None:
+//            generator.llvm_gen(self)
+
+
+    public Integer getRow() {
+        return row;
+    }
+
+    public void setRow(Integer row) {
+        this.row = row;
+    }
+
+    public Integer getCol() {
+        return col;
+    }
+
+    public void setCol(Integer col) {
+        this.col = col;
+    }
+
+    public TypeDesc getNodeType() {
+        return nodeType;
+    }
+
+    public void setNodeType(TypeDesc nodeType) {
+        this.nodeType = nodeType;
+    }
+
+    public IdentDesc getNodeIdent() {
+        return nodeIdent;
+    }
+
+    public void setNodeIdent(IdentDesc nodeIdent) {
+        this.nodeIdent = nodeIdent;
     }
 }

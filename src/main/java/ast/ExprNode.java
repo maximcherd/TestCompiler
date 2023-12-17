@@ -3,7 +3,10 @@ package ast;
 import semanticBase.IdentDesc;
 import semanticBase.TypeDesc;
 
-public class ExprNode extends AstNode {
+/**
+ * Абстрактный класс для выражений в AST-дереве
+ */
+public abstract class ExprNode extends AstNode {
     public ExprNode() {
     }
 
@@ -14,6 +17,4 @@ public class ExprNode extends AstNode {
     public ExprNode(Integer row, Integer col, TypeDesc nodeType, IdentDesc nodeIdent) {
         super(row, col, nodeType, nodeIdent);
     }
-
-
 }
