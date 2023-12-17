@@ -1,4 +1,5 @@
 import ast.StmtListNode;
+import printer.Printer;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -9,6 +10,7 @@ public class Program {
     public static void execute(String programFile, boolean msilOnly, boolean jbcOnly, String fileName) {
         StmtListNode program = null;
         try {
+//            System.out.println(Printer.printList(programFile.getBytes(), "\n"));
             InputStream is = new ByteArrayInputStream(programFile.getBytes());
             if (parser == null) {
                 parser = new Parser(is);

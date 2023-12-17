@@ -74,10 +74,10 @@ public class TypeDesc {
 
     public static TypeDesc fromStr(String strDec) throws Exception {
         try {
-            BaseType baseType = BaseType.valueOf(strDec);
+            BaseType baseType = BaseType.byValue(strDec);
             return new TypeDesc(baseType);
         } catch (Exception e) {
-            throw new SemanticException("ERROR" + "unknown type" + strDec);
+            throw new SemanticException("ERROR " + "unknown type " + strDec);
         }
     }
 

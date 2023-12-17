@@ -27,7 +27,7 @@ public class GroupNode extends AstNode {
 
     @Override
     public List<AstNode> childs() {
-        return this.childs();
+        return this._childs;
     }
 
     public String getName() {

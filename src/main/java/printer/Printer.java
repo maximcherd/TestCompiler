@@ -22,6 +22,17 @@ public class Printer {
         return sb.toString();
     }
 
+    public static String printList(byte[] list, String sep) {
+        StringBuilder sb = new StringBuilder();
+        for (byte item : list) {
+            sb.append(">");
+            sb.append(item);
+            sb.append(sep);
+        }
+        sb.append("\n").append(new String(list));
+        return sb.toString();
+    }
+
     public static String readFile(String file) {
         StringBuilder sb = new StringBuilder();
         try {

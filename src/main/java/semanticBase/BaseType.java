@@ -17,4 +17,13 @@ public enum BaseType {
     public String toString() {
         return this.value;
     }
+
+    public static BaseType byValue(String value) {
+        for (BaseType baseType : values()) {
+            if (baseType.value.equals(value)) {
+                return baseType;
+            }
+        }
+        return null;
+    }
 }

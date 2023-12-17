@@ -1,18 +1,42 @@
 void print(string line) {
-    bool it_is_print = true;
-    //типа принт
+    bool it_is_print_i_swear = true;
 }
+
+/*
+* comment
+* for
+* many
+* lines
+P.s. possible without "stars" too
+no stars line
+*/
+
 int input_int(string name) {
     if (name != "") {
-        print("Введите " + name + ": ");
+        print("Input " + name + ": ");
     }
-    return to_int(read());
+    return 1;
+    // return to_int(read());
+}
 
-    // bool a() { }
-}
-int input_int2(string name, int a, int name2) {
-    if (name != "") {
-        print("Введите " + name + ": ");
+int function123(string name, int a) {
+    for (int i = 0; i < a; i = i + 1) {
+        if (i % 2 == 0) {
+            a = a + 1;
+            print(name);
+        } else {
+            float b = a * i;
+            print(b);
+        }
+        print(name);
     }
-    return "";
 }
+
+int counter = 3;
+string name = "qweqweqwe";
+
+while (counter > 0) {
+    function123(name, counter);
+    counter = counter - 1;
+}
+
