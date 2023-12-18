@@ -1,4 +1,5 @@
 import ast.StmtListNode;
+import codeGenBase.msil.MsilCodeGenerator;
 import parser.Parser;
 import printer.Printer;
 import semanticBase.IdentScope;
@@ -42,16 +43,17 @@ public class Program {
         }
         if (!jbcOnly) {
             try {
-//                gen = msil.MsilCodeGenerator()
-//                gen.gen_program(prog)
-//                print(*gen.code, sep=os.linesep)
+                MsilCodeGenerator gen = new MsilCodeGenerator();
+                gen.genProgram(prog);
+                System.out.println(Printer.printTree(gen.code(), System.lineSeparator()));
             } catch (Exception e) {
-                System.out.println("ERROR: " + e.getMessage());
+                System.out.println(String.format("Ошибка: %s", e.getMessage()));
+                System.exit(3);
             }
         }
 
         if (!(msilOnly || jbcOnly)) {
-            System.out.println("jbc:");
+//            System.out.println("jbc:");
         }
         if (!msilOnly) {
             try {
@@ -59,7 +61,7 @@ public class Program {
 //                gen.gen_program(prog)
 //                print(*gen.code, sep=os.linesep)
             } catch (Exception e) {
-                System.out.println("ERROR: " + e.getMessage());
+                System.out.println(String.format("Ошибка: %s", e.getMessage()));
             }
         }
     }

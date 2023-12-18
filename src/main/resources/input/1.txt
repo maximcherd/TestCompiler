@@ -21,11 +21,11 @@ int function123(string name, int a) {
             a = a + 1;
             print(name);
         } else {
-            float b = a * i;
+            float b = 1.2;
             print(b);
         }
-        print(name);
     }
+    return a;
 }
 
 int counter = 3;

@@ -25,33 +25,33 @@ public class SemanticChecker {
 
     public void semanticCheck(AstNode node, IdentScope scope) throws SemanticException {
         if (node instanceof LiteralNode) {
-            semanticCheck((LiteralNode) node, scope);
+            this.semanticCheck((LiteralNode) node, scope);
         } else if (node instanceof TypeNode) {
-            semanticCheck((TypeNode) node, scope);
+            this.semanticCheck((TypeNode) node, scope);
         } else if (node instanceof IdentNode) {
-            semanticCheck((IdentNode) node, scope);
+            this.semanticCheck((IdentNode) node, scope);
         } else if (node instanceof BinOpNode) {
-            semanticCheck((BinOpNode) node, scope);
+            this.semanticCheck((BinOpNode) node, scope);
         } else if (node instanceof CallNode) {
-            semanticCheck((CallNode) node, scope);
+            this.semanticCheck((CallNode) node, scope);
         } else if (node instanceof AssignNode) {
-            semanticCheck((AssignNode) node, scope);
+            this.semanticCheck((AssignNode) node, scope);
         } else if (node instanceof VarsNode) {
-            semanticCheck((VarsNode) node, scope);
+            this.semanticCheck((VarsNode) node, scope);
         } else if (node instanceof ReturnNode) {
-            semanticCheck((ReturnNode) node, scope);
+            this.semanticCheck((ReturnNode) node, scope);
         } else if (node instanceof IfNode) {
-            semanticCheck((IfNode) node, scope);
+            this.semanticCheck((IfNode) node, scope);
         } else if (node instanceof WhileNode) {
-            semanticCheck((WhileNode) node, scope);
+            this.semanticCheck((WhileNode) node, scope);
         } else if (node instanceof ForNode) {
-            semanticCheck((ForNode) node, scope);
+            this.semanticCheck((ForNode) node, scope);
         } else if (node instanceof ParamNode) {
-            semanticCheck((ParamNode) node, scope);
+            this.semanticCheck((ParamNode) node, scope);
         } else if (node instanceof FuncNode) {
-            semanticCheck((FuncNode) node, scope);
+            this.semanticCheck((FuncNode) node, scope);
         } else if (node instanceof StmtListNode) {
-            semanticCheck((StmtListNode) node, scope);
+            this.semanticCheck((StmtListNode) node, scope);
         }
     }
 

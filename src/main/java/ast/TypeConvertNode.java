@@ -9,23 +9,22 @@ import java.util.List;
  * Класс для представления в AST-дереве операций конвертации типов данных
  * (в языке программирования может быть как expression, так и statement)
  */
-public class TypeConvertNode  extends ExprNode{
-    private ExprNode    expr;
+public class TypeConvertNode extends ExprNode {
+    private ExprNode expr;
     private TypeDesc type;
-    private TypeDesc nodeType;
 
 
     public TypeConvertNode(ExprNode expr, TypeDesc type) {
         this.expr = expr;
         this.type = type;
-        this.nodeType = type;
+        super.setNodeType(type);
     }
 
     public TypeConvertNode(Integer row, Integer col, ExprNode expr, TypeDesc type) {
         super(row, col);
         this.expr = expr;
         this.type = type;
-        this.nodeType = type;
+        super.setNodeType(type);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ast;
 
+import codeGenBase.msil.MsilCodeGenerator;
 import exceptions.SemanticException;
 import semanticBase.IdentDesc;
 import semanticBase.IdentScope;
@@ -79,8 +80,12 @@ public abstract class AstNode {
         checker.semanticCheck(this, scope);
     }
 
+    public void msilGen(MsilCodeGenerator generator) {
+        generator.msilGen(this);
+    }
 
-//    """Чтобы среда не "ругалась" в модуле msil
+
+//    """Чтобы среда не "ругалась" в модуле codeGenBase.msil
 //    """
 //    def msil_gen(self, generator) -> None:
 //            generator.msil_gen(self)
