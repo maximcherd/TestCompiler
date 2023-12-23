@@ -1,8 +1,12 @@
 package printer;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.List;
 
+/**
+ * Класс для упрощения ввода/вывода текста
+ */
 public class Printer {
     public static String printTree(List<String> tree, String sep) {
         StringBuilder sb = new StringBuilder();
@@ -46,5 +50,15 @@ public class Printer {
             System.out.println("ERROR: " + e.getMessage());
         }
         return sb.toString();
+    }
+
+    public static void writeToFile(String file, String text, boolean append) {
+        try {
+            FileWriter fw = new FileWriter(file, append);
+            fw.write(text);
+            fw.close();
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
     }
 }

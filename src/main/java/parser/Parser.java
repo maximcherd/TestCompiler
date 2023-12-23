@@ -5,6 +5,9 @@ import ast.StmtListNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+/**
+ * Класс для вызова javacc парсера
+ */
 public class Parser {
     private static JavaCCParserFromC parser = null;
 

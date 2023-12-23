@@ -33,7 +33,6 @@ public class MsilCodeGenerator extends CodeGenerator {
         this.add("{");
         this.add("}");
         this.add(String.format(".class public %s", PROGRAM_CLASS_NAME));
-        this.add(".assembly program");
         this.add("{");
     }
 
@@ -181,7 +180,7 @@ public class MsilCodeGenerator extends CodeGenerator {
             }
         } else if (node.getOp().equals(BinOp.ADD)) {
             if (node.getArg1().getNodeType().equals(TypeDesc.STR)) {
-                this.add(String.format("call %s class %s::concat(%s, %s)", MSIL_TYPE_NAMES.get(BaseType.INT),
+                this.add(String.format("call %s class %s::concat(%s, %s)", MSIL_TYPE_NAMES.get(BaseType.STR),
                         RUNTIME_CLASS_NAME, MSIL_TYPE_NAMES.get(BaseType.STR), MSIL_TYPE_NAMES.get(BaseType.STR)));
             } else {
                 this.add("add");
@@ -282,8 +281,9 @@ public class MsilCodeGenerator extends CodeGenerator {
             params.add(String.format("%s %s",
                     MSIL_TYPE_NAMES.get(param.getType().getType().getBaseType()), param.getName().getName()));
         }
-        this.add(String.format(".method public static %s %s(%s) cil managed {",
+        this.add(String.format(".method public static %s %s(%s) cil managed",
                 MSIL_TYPE_NAMES.get(node.getType().getType().getBaseType()), node.getName().toString(), params));
+        this.add("{");
         List<VarsNode> localVarsDecls = CodeGenBase.findVarsDecls(node);
         StringBuilder decl = new StringBuilder(".locals init (");
         int count = 0;

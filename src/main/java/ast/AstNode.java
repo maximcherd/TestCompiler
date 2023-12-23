@@ -84,12 +84,7 @@ public abstract class AstNode {
         generator.msilGen(this);
     }
 
-
-//    """Чтобы среда не "ругалась" в модуле codeGenBase.msil
-//    """
-//    def msil_gen(self, generator) -> None:
-//            generator.msil_gen(self)
-//
+//      при добавлении новых генераторов кода надо добавить аналогичные методы:
 //            """Чтобы среда не "ругалась" в модуле jbc
 //    """
 //    def jbc_gen(self, generator) -> None:

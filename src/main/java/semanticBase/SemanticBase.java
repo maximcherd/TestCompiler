@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Класс базовых методов и констант для семантического анализа
+ */
 public class SemanticBase {
     public static BaseType VOID = BaseType.VOID;
     public static BaseType INT = BaseType.INT;

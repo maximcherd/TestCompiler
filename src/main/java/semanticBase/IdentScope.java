@@ -58,7 +58,7 @@ public class IdentScope {
         IdentScope funcScope = this.currFunc();
         IdentScope globalScope = this.currGlobal();
 
-        if (ident.getScope().equals(ScopeType.PARAM)) {
+        if (!ident.getScope().equals(ScopeType.PARAM)) {
             ident.setScope(funcScope != null ? ScopeType.LOCAL :
                     (this.equals(globalScope) ? ScopeType.GLOBAL : ScopeType.GLOBAL_LOCAL));
         }

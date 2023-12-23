@@ -5,6 +5,9 @@ import exceptions.SemanticException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс для описания типов данных
+ */
 public class TypeDesc {
     public static TypeDesc VOID = new TypeDesc(BaseType.VOID);
     public static TypeDesc INT = new TypeDesc(BaseType.INT);

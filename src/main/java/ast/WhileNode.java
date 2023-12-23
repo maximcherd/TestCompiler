@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Класс для представления в AST-дереве условного оператора
  */
-public class WhileNode extends StmtNode{
+public class WhileNode extends StmtNode {
     private ExprNode cond;
     private StmtNode body;
 

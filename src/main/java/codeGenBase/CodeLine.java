@@ -3,6 +3,9 @@ package codeGenBase;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс для описания строки кода
+ */
 public class CodeLine {
     private Object code;
     private List<Object> params = new ArrayList<>();

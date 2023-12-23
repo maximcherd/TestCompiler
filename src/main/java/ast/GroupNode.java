@@ -7,17 +7,17 @@ import java.util.List;
  */
 public class GroupNode extends AstNode {
     private String name;
-    private List<AstNode> _childs;
+    private List<AstNode> childs;
 
     public GroupNode(String name, List<AstNode> childs) {
         this.name = name;
-        this._childs = childs;
+        this.childs = childs;
     }
 
-    public GroupNode(Integer row, Integer col, String name, List<AstNode> _childs) {
+    public GroupNode(Integer row, Integer col, String name, List<AstNode> childs) {
         super(row, col);
         this.name = name;
-        this._childs = _childs;
+        this.childs = childs;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class GroupNode extends AstNode {
 
     @Override
     public List<AstNode> childs() {
-        return this._childs;
+        return this.childs;
     }
 
     public String getName() {
@@ -38,11 +38,11 @@ public class GroupNode extends AstNode {
         this.name = name;
     }
 
-    public List<AstNode> get_childs() {
-        return _childs;
+    public List<AstNode> getChilds() {
+        return childs;
     }
 
-    public void set_childs(List<AstNode> _childs) {
-        this._childs = _childs;
+    public void setChilds(List<AstNode> childs) {
+        this.childs = childs;
     }
 }

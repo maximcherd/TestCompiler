@@ -45,24 +45,27 @@ public class Program {
             try {
                 MsilCodeGenerator gen = new MsilCodeGenerator();
                 gen.genProgram(prog);
-                System.out.println(Printer.printTree(gen.code(), System.lineSeparator()));
+                String resultMsil = Printer.printTree(gen.code(), System.lineSeparator());
+                System.out.println(resultMsil);
+                Printer.writeToFile(fileName.split("[.]")[0] + ".msil", resultMsil, false);
             } catch (Exception e) {
                 System.out.println(String.format("Ошибка: %s", e.getMessage()));
                 System.exit(3);
             }
         }
 
-        if (!(msilOnly || jbcOnly)) {
+//        todo реализовать аналогично генерации msil кода генерацию java byte code
+//        if (!(msilOnly || jbcOnly)) {
 //            System.out.println("jbc:");
-        }
-        if (!msilOnly) {
-            try {
+//        }
+//        if (!msilOnly) {
+//            try {
 //                gen = jbc.JbcCodeGenerator(file_name)
 //                gen.gen_program(prog)
 //                print(*gen.code, sep=os.linesep)
-            } catch (Exception e) {
-                System.out.println(String.format("Ошибка: %s", e.getMessage()));
-            }
-        }
+//            } catch (Exception e) {
+//                System.out.println(String.format("Ошибка: %s", e.getMessage()));
+//            }
+//        }
     }
 }

@@ -1,5 +1,8 @@
 package semanticBase;
 
+/**
+ * Перечисление базовых типов данных
+ */
 public enum BaseType {
     VOID("void"),
     INT("int"),

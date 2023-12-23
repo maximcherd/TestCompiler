@@ -1,5 +1,8 @@
 package codeGenBase;
 
+/**
+ * Класс для описания меток
+ */
 public class CodeLabel {
     private Integer index;
     private String prefix = "L";

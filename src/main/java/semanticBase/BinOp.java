@@ -1,5 +1,8 @@
 package semanticBase;
 
+/**
+ * Перечисление бинарных операций
+ */
 public enum BinOp {
 
     ADD("+"),

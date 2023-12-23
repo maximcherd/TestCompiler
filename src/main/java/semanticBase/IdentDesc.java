@@ -1,7 +1,7 @@
 package semanticBase;
 
 /**
- * класс для описания переменных
+ * Класс для описания переменных
  */
 public class IdentDesc {
     private String name;

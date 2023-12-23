@@ -1,5 +1,8 @@
 package semanticBase;
 
+/**
+ * Перечисление областей видимости переменных
+ */
 public enum ScopeType {
     GLOBAL("global"),
     GLOBAL_LOCAL("global.local"),

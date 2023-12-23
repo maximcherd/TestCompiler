@@ -4,6 +4,7 @@ import ast.*;
 import exceptions.SemanticException;
 import parser.ParseException;
 import parser.Parser;
+import printer.Printer;
 import semanticBase.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ import static ast.AstBase.EMPTY_IDENT;
 import static ast.AstBase.EMPTY_STMT;
 import static semanticBase.SemanticBase.*;
 
+/**
+ * Класс семантического анализатора
+ */
 public class SemanticChecker {
     public static String BUILT_IN_OBJECTS =
             "string read() { }" +

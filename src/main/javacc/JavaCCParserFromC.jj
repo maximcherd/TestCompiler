@@ -243,7 +243,6 @@ StmtListNode forStmtList0(): {
     StmtNode n;
     List<StmtNode> nList = new ArrayList<>();
 } {
-//todo n type is ExprNode wich is same lvl as StmtNode
     (n=simpleStmt() {nList.add(n);} (<COMMA> n=simpleStmt() {nList.add(n);})*)?
     {return new StmtListNode(nList);}
 }
@@ -258,7 +257,6 @@ StmtNode forStmtList(): {
 ExprNode forCond(): {
     ExprNode n;
 } {
-//todo empty->null?
     (n=expr() | <EMPTY> {n=new StmtListNode(new ArrayList<>());})
     {return n;}
 }
@@ -266,7 +264,6 @@ ExprNode forCond(): {
 StmtNode forBody(): {
     StmtNode n;
 } {
-//todo semi->null?
     (n=stmt() | <SEMI> {n=new StmtListNode(new ArrayList<>());})
     {return n;}
 }

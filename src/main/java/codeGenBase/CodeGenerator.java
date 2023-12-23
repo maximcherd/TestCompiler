@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CodeGenerator {
+/**
+ * Абстрактный класс для генерации кода
+ */
+public abstract class CodeGenerator {
     private List<CodeLine> codeLines = new ArrayList<>();
     private String indent = "";
 

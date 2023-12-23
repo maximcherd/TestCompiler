@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Класс описания базовых методов и констант для генерации кода
+ */
 public class CodeGenBase {
     public static HashMap<BaseType, Object> DEFAULT_TYPE_VALUES = new HashMap<>();
 
